@@ -6,9 +6,10 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import org.mariuszgromada.math.mxparser.*;
 
-import org.mozilla.javascript.Context;
-import org.mozilla.javascript.Scriptable;
+/*import org.mozilla.javascript.Context;
+import org.mozilla.javascript.Scriptable;*/
 
 public class MainActivity extends AppCompatActivity {
     Button btn0,btn1,btn2,btn3,btn4,btn5,btn6,btn7,btn8,btn9,btn_equals,btn_add,btn_sub,btn_div,btn_mod,btn_ac,btn_decimal,btn,btn_mult;
@@ -179,23 +180,24 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        // +/- is not used for times being so please check it out later
+        btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                data = input.getText().toString();
+                input.setText(data+"^");
+            }
+        });
 
         btn_equals.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 data = input.getText().toString();
-                data.replaceAll("×","*");
-                data.replaceAll("÷","/");
-                data.replaceAll("%","/100");
+                data = data.replaceAll("×","*");
+                data = data.replaceAll("÷","/");
 
-                /*Context rhino = Context.enter();*/
-                /*rhinoAndroidHelper = new RhinoAndroidHelper(this);
-                context = rhinoAndroidHelper.enterContext();
-                rhino.setOptimizationLevel(-1);
-                String finalResult="";
-                Scriptable scriptable = rhino.initStandardObjects();
-                finalResult = rhino.evaluateString(scriptable,data,sourceName="Javascript",lineno:1,securityDomain : null).toString();*/
+                Expression exp = new Expression(data);
+                String result = String.valueOf(exp.calculate());
+                output.setText(result);
             }
         });
     }
